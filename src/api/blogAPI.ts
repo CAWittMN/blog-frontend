@@ -1,6 +1,6 @@
 import axios from "axios";
-import { jwtDecode, JwtPayload } from "jwt-decode";
-import { PayLoad, LoginData, RegisterData } from "../types/types";
+import { jwtDecode } from "jwt-decode";
+import { PayLoad } from "../types/types";
 
 const BASE_URL =
   import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3005";
@@ -85,6 +85,8 @@ class BlogAPI {
 
   static async createBlogPost(data: {}) {
     if (!this.isAdmin) throw Error("Unauthorized!");
+    let res = await this.request(`blog/create`, data, "post");
+    return res;
   }
 }
 
