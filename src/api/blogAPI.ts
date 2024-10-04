@@ -27,25 +27,26 @@ class BlogAPI {
     }
   }
 
-  static loadApi(token: any) {
+  static decodeTokenAndLoadApi(token: any) {
     this.token = token;
     const { username, isAdmin } = jwtDecode<PayLoad>(token);
     this.username = username;
     this.isAdmin = isAdmin;
+    return { username, isAdmin };
   }
 
   static async register(data: {}) {
     let res = await this.request(`auth/register`, data, "post");
     const token = res.token;
-    this.loadApi(token);
-    return token;
+    const { username, isAdmin } = this.decodeTokenAndLoadApi(token);
+    return { username, isAdmin, token };
   }
 
   static async login(data: {}) {
     let res = await this.request(`auth/login`, data, "post");
     const token = res.token;
-    this.loadApi(token);
-    return token;
+    const { username, isAdmin } = this.decodeTokenAndLoadApi(token);
+    return { username, isAdmin, token };
   }
 
   static async logout() {
